@@ -13,8 +13,9 @@
 		<mybatis.version>3.2.8</mybatis.version>
 		<mybatis.spring.version>1.2.2</mybatis.spring.version>
 		<mybatis.paginator.version>1.2.15</mybatis.paginator.version>
-		<mysql.version>5.1.32</mysql.version>
+		<mysql.version>5.1.43</mysql.version>
 		<slf4j.version>1.6.4</slf4j.version>
+		<log4j.version>1.2.17</log4j.version>
 		<jackson.version>2.4.2</jackson.version>
 		<druid.version>1.0.9</druid.version>
 		<httpclient.version>4.3.5</httpclient.version>
@@ -56,6 +57,7 @@
 				<artifactId>commons-net</artifactId>
 				<version>${commons-net.version}</version>
 			</dependency>
+			
 			<!-- Jackson Json处理工具包 -->
 			<dependency>
 				<groupId>com.fasterxml.jackson.core</groupId>
@@ -81,6 +83,11 @@
 				<artifactId>slf4j-log4j12</artifactId>
 				<version>${slf4j.version}</version>
 			</dependency>
+			<dependency>
+		      <groupId>log4j</groupId>
+		      <artifactId>log4j</artifactId>
+		      <version>${log4j.version}</version>
+		    </dependency>
 			<!-- Mybatis -->
 			<dependency>
 				<groupId>org.mybatis</groupId>
@@ -113,6 +120,16 @@
 				<groupId>com.alibaba</groupId>
 				<artifactId>druid</artifactId>
 				<version>${druid.version}</version>
+			</dependency>
+			<dependency>
+		      <groupId>aopalliance</groupId>
+		      <artifactId>aopalliance</artifactId>
+		      <version>1.0</version>
+			</dependency>
+			<dependency>
+				<groupId>aspectj</groupId>
+				<artifactId>aspectjweaver</artifactId>
+				<version>1.5.4</version>
 			</dependency>
 			<!-- Spring -->
 			<dependency>
@@ -150,6 +167,17 @@
 				<artifactId>spring-core</artifactId>
 				<version>${spring.version}</version>
 			</dependency>
+			    <dependency>
+		     <groupId>org.springframework</groupId>
+		      <artifactId>spring-tx</artifactId>
+		      <version>${spring.version}</version>
+		    </dependency>
+    <!-- https://mvnrepository.com/artifact/org.springframework/spring-expression -->
+		    <dependency>
+		      <groupId>org.springframework</groupId>
+		      <artifactId>spring-expression</artifactId>
+		      <version>${spring.version}</version>
+		    </dependency>
 			<!-- JSP相关 -->
 			<dependency>
 				<groupId>jstl</groupId>
