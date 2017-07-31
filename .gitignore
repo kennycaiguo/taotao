@@ -36,5 +36,6 @@ local.properties
 
 # IDEA setting file or folder
 .idea/
+*.iml
 
 target/

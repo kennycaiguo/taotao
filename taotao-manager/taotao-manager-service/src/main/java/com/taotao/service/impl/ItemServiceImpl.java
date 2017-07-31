@@ -17,7 +17,7 @@ import com.taotao.service.ItemService;
  * @Description:TODO 商品管理 Service
  * @author: DoctorDeng
  * @date:   2017年7月27日 下午10:05:01   
- *
+ * @version: 1.0
  */
 @Service
 public class ItemServiceImpl implements ItemService {
