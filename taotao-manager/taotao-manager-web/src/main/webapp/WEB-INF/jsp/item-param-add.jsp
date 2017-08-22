@@ -35,7 +35,7 @@
 		</ul>
 	</li>
 </div>
-<script style="text/javascript">
+<script type="text/javascript">
 	$(function(){
 		TAOTAO.initItemCat({
 			fun:function(node){
@@ -92,14 +92,26 @@
 					});					
 				}
 			});
-			var url = "/item/param/save/"+$("#itemParamAddTable [name=cid]").val();
-			$.post(url,{"paramData":JSON.stringify(params)},function(data){
-				if(data.status == 200){
-					$.messager.alert('提示','新增商品规格成功!',undefined,function(){
-						$(".panel-tool-close").click();
-    					$("#itemParamList").datagrid("reload");
-    				});
-				}
+			<%--/item/cat/{itemCatId}/param--%>
+			var saveurl = "/item/cat/" + $("#itemParamAddTable [name=cid]").val() + "/param";
+			<%--var url = "/item/param/save/"+$("#itemParamAddTable [name=cid]").val();--%>
+			$.ajax({
+                url:saveurl,
+				data:{"paramData":JSON.stringify(params)},
+				type:"PUT",
+				success:function (data) {
+                    if(data.status == 200){
+                        $.messager.alert('提示','新增商品规格成功!',undefined,function(){
+                            $(".panel-tool-close").click();
+                            $("#itemParamList").datagrid("reload");
+                        });
+                    } else {
+                        $.messager.alert('提示','新增商品规格失败!',undefined,function(){
+                            $(".panel-tool-close").click();
+                            $("#itemParamList").datagrid("reload");
+                        });
+					}
+                }
 			});
 		});
 	});

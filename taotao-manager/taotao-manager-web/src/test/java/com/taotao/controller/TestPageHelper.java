@@ -29,12 +29,12 @@ import com.taotao.pojo.TbItemExample;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("classpath:spring/applicationContext*.xml")
 @Transactional
-public class TestPageHelper {
-	private Logger log = LoggerFactory.getLogger(TestPageHelper.class);
+public class TestPageHelper extends BaseTest{
 	@Resource
 	private TbItemMapper tbItemMapper;
 	@Test
 	public void testQuery() {
+		// 使用此方法后的第一个查询会被分页, 方法两个参数分别为：页码，页面数据量
 		PageHelper.startPage(1, 10);
 		TbItemExample example = new TbItemExample();
 		example.createCriteria().andImageIsNotNull();

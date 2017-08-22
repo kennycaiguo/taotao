@@ -3,6 +3,8 @@ package com.taotao.mapper;
 import com.taotao.pojo.TbItem;
 import com.taotao.pojo.TbItemExample;
 import java.util.List;
+import java.util.Map;
+
 import org.apache.ibatis.annotations.Param;
 
 public interface TbItemMapper {
@@ -27,4 +29,15 @@ public interface TbItemMapper {
     int updateByPrimaryKeySelective(TbItem record);
 
     int updateByPrimaryKey(TbItem record);
+
+    /**
+     *
+     * @param updateParams
+     * {
+     *    status : 商品状态, {@link com.taotao.constant.ItemConst}
+     *    ids: Long[] 商品 ID 数组
+     * }
+     * @return 更新商品状态成功的数量
+     */
+    int batchUpdateItemStatus(Map updateParams);
 }

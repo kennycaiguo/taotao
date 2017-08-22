@@ -1,13 +1,9 @@
 package com.taotao.controller;
 
-import java.util.Map;
-
 import org.slf4j.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
  * 
@@ -32,11 +28,5 @@ public class PageController {
 	@RequestMapping("/{page}")
 	public String showPage(@PathVariable() String page) {
 		return page;
-	}
-	@RequestMapping(method=RequestMethod.GET,value="/item/list")
-	@ResponseBody
-	public Map<String, Object> qryItemByPage(String page, String rows) {
-		
-		return null;
 	}
 }
