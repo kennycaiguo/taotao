@@ -7,6 +7,8 @@ import java.util.Map;
 import javax.annotation.Resource;
 
 import com.taotao.constant.ItemConst;
+import com.taotao.mapper.TbItemParamItemMapper;
+import com.taotao.pojo.*;
 import org.apache.commons.beanutils.ConvertUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
@@ -18,9 +20,6 @@ import com.taotao.common.pojo.EUDataGridResult;
 import com.taotao.common.utils.IDUtils;
 import com.taotao.mapper.TbItemDescMapper;
 import com.taotao.mapper.TbItemMapper;
-import com.taotao.pojo.TbItem;
-import com.taotao.pojo.TbItemDesc;
-import com.taotao.pojo.TbItemExample;
 import com.taotao.pojo.TbItemExample.Criteria;
 import com.taotao.service.ItemService;
 /**
@@ -37,6 +36,8 @@ public class ItemServiceImpl implements ItemService {
 	private TbItemMapper itemMapper;
 	@Resource
 	private TbItemDescMapper itemDescMapper;
+	@Resource
+	private TbItemParamItemMapper itemParamItemMapper;
 	
 	@Override
 	public TbItem getItemById(long itemId) {
@@ -60,7 +61,6 @@ public class ItemServiceImpl implements ItemService {
 	 * @param rows 每页数据量
 	 * @return  {@link  com.taotao.common.pojo.EUDataGridResult} 
 	 * 		and {@link  com.taotao.pojo.TbItem}
-	 * @see com.taotao.service.ItemService#listItem(long, long)
 	 */
 	@Override
 	public EUDataGridResult<TbItem> listItem(int page, int rows) {
@@ -81,11 +81,10 @@ public class ItemServiceImpl implements ItemService {
 	 * <p>Description: 添加商品 </p>   
 	 * @param item
 	 * @param desc 商品规格模板
-	 * @return   
-	 * @see com.taotao.service.ItemService#addItem(com.taotao.pojo.TbItem)
+	 * @return
 	 */
 	@Override
-	public CommonResult addItem(TbItem item, String desc) throws Exception {
+	public CommonResult addItem(TbItem item, String desc, String itemParams) throws Exception {
 		java.util.Date date = new java.util.Date();
 		Long itemId = IDUtils.genItemId();
 		item.setId(itemId);
@@ -99,7 +98,18 @@ public class ItemServiceImpl implements ItemService {
 		if (result.getStatus() != 200) {
 			throw new Exception();
 		}
-		
+
+		TbItemParamItem tbItemParamItem = new TbItemParamItem();
+		tbItemParamItem.setItemId(itemId);
+		tbItemParamItem.setCreated(date);
+		tbItemParamItem.setUpdated(date);
+		tbItemParamItem.setItemId(itemId);
+		tbItemParamItem.setParamData(itemParams);
+		int count = itemParamItemMapper.insert(tbItemParamItem);
+		if (1 != count) {
+			throw  new Exception();
+		}
+
 		return CommonResult.ok();
 	}
 
@@ -147,6 +157,45 @@ public class ItemServiceImpl implements ItemService {
 		return CommonResult.build(500, "批量上架商品失败");
 	}
 
+	@Override
+	public TbItemParamItem getItemParam(Long itemId) {
+		TbItemParamItemExample tbItemParamExample = new TbItemParamItemExample();
+		TbItemParamItemExample.Criteria criteria = tbItemParamExample.createCriteria();
+		criteria.andItemIdEqualTo(itemId);
+		List<TbItemParamItem> itemParamItemList = itemParamItemMapper.selectByExampleWithBLOBs(tbItemParamExample);
+		if (null != itemParamItemList && !itemParamItemList.isEmpty()) {
+			return itemParamItemList.get(0);
+		}
+		return null;
+	}
+
+    @Override
+    public CommonResult getItemDescByItemId(Long itemId) {
+		TbItemDescExample itemDescExample = new TbItemDescExample();
+		TbItemDescExample.Criteria criteria = itemDescExample.createCriteria();
+		criteria.andItemIdEqualTo(itemId);
+		List<TbItemDesc> itemDescs = itemDescMapper.selectByExample(itemDescExample);
+		if (null != itemDescs && !itemDescs.isEmpty()) {
+			return CommonResult.ok(itemDescs.get(0));
+		}
+		return CommonResult.build(400, "不合法的请求");
+    }
+
+	@Override
+	public CommonResult updateItem(TbItem item, String desc, String itemParams, String itemParamId) {
+		java.util.Date date = new java.util.Date();
+		item.setUpdated(date);
+		itemMapper.updateByPrimaryKey(item);
+		TbItemDesc tbItemDesc = new TbItemDesc();
+		tbItemDesc.setUpdated(date);
+		tbItemDesc.setItemId(item.getId());
+		tbItemDesc.setItemDesc(desc);
+		itemDescMapper.updateByPrimaryKey(tbItemDesc);
+		/*TbItemParamItem tbItemParamItem = new TbItemParamItem();
+		tbItemParamItem.set*/
+		return null;
+	}
+
 	private CommonResult addItemDesc(Long itemId, String desc) {
 		java.util.Date nowDate = new java.util.Date();
 		TbItemDesc itemDesc = new TbItemDesc();
@@ -159,6 +208,7 @@ public class ItemServiceImpl implements ItemService {
 		if (1 == insertCount) {
 			return CommonResult.ok();
 		}
+
 		return CommonResult.build(500, "添加商品描述出错!");
 	}
 }

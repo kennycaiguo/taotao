@@ -2,11 +2,9 @@ package com.taotao.controller;
 
 import javax.annotation.Resource;
 
+import com.taotao.pojo.TbItemParamItem;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import com.taotao.common.pojo.CommonResult;
 import com.taotao.common.pojo.EUDataGridResult;
@@ -17,8 +15,8 @@ import com.taotao.service.ItemService;
 public class ItemController {
 	@Resource
 	private ItemService itemService;
-	
-	@RequestMapping(value = "/item/{itemId}", method = RequestMethod.GET)
+
+	@RequestMapping(value = "/rest/page/item-edit/{itemId}", method = RequestMethod.GET)
 	@ResponseBody
 	public TbItem getItemById(@PathVariable("itemId") Long itemId) {
 		return itemService.getItemById(itemId);
@@ -32,32 +30,44 @@ public class ItemController {
 	
 	@RequestMapping(method = RequestMethod.POST, value="/item/save")
 	@ResponseBody
-	public CommonResult addItem(TbItem item, String desc, String itemParam) throws Exception {
-
-		return itemService.addItem(item, desc);
+	public CommonResult addItem(TbItem item, String desc, String itemParams) throws Exception {
+		return itemService.addItem(item, desc, itemParams);
+	}
+	@RequestMapping(method = RequestMethod.POST, value = "/rest/item/delete")
+	@ResponseBody
+	public CommonResult batchDeleteItem(String ids) {
+		return itemService.batchDeleteItem(ids);
+	}
+	@RequestMapping(method = RequestMethod.POST, value = "/rest/item/instock")
+	@ResponseBody
+	public CommonResult batchUnderItem(String ids) {
+		return itemService.batchUnderItem(ids);
+	}
+	@RequestMapping(method = RequestMethod.POST, value = "/rest/item/reshelf")
+	@ResponseBody
+	public CommonResult batchGoupItem(String ids) {
+		return itemService.batchGoupItem(ids);
 	}
 
-	@RequestMapping(method = RequestMethod.POST, value = "/item")
+	@RequestMapping(method = RequestMethod.POST, value="/rest/item/update")
 	@ResponseBody
-	public CommonResult batchUpdateItem( String ids, String type) {
-		if ("delete".equals(type)) {
-			return itemService.batchDeleteItem(ids);
-		}
+	public CommonResult updateItem(TbItem item, String desc, String itemParams, String itemParamId) {
 
-		if ("under".equals(type)) {
-			return itemService.batchUnderItem(ids);
-		}
-
-		if ("goup".equals(type)) {
-			return itemService.batchGoupItem(ids);
-		}
-
-		return CommonResult.build(403,"不合法的请求!");
-	}
-
-	@RequestMapping(method = RequestMethod.POST, value="/item/{itemId}")
-	@ResponseBody
-	public CommonResult updateItem() {
 		return null;
+	}
+
+	@RequestMapping(method = RequestMethod.GET, value = "/rest/item/param/item/query/{itemId}")
+	@ResponseBody
+	public CommonResult queryItemParamItem(@PathVariable("itemId") Long itemId) {
+		TbItemParamItem tbItemParamItem = itemService.getItemParam(itemId);
+		if (null != tbItemParamItem) {
+			return CommonResult.ok(tbItemParamItem);
+		}
+		return  CommonResult.build(400, "查询不到数据");
+	}
+	@RequestMapping(method = RequestMethod.GET, value = "/rest/item/query/item/desc/{itemId}")
+	@ResponseBody
+	public CommonResult queryItemDesc(@PathVariable("itemId") Long itemId) {
+		return itemService.getItemDescByItemId(itemId);
 	}
 }

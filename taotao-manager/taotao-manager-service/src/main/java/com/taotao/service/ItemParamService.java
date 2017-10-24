@@ -20,7 +20,10 @@ public interface ItemParamService {
 	 */
 	CommonResult getItemParamByItemCatId(long itemCatId);
 
-	CommonResult addItemParam(long itemCatid, String itemParam);
+	CommonResult addItemCatParam(long itemCatid, String itemParam);
 
 	EUDataGridResult<TbItemParam> listItemParamByPage(Integer page, Integer rows);
+
+	String getItemParamByItemId(Long itemId);
+	CommonResult deleteItemParam(String ids);
 }
