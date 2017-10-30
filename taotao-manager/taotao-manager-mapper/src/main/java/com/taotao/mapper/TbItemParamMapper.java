@@ -33,5 +33,5 @@ public interface TbItemParamMapper {
     int updateByPrimaryKeyWithBLOBs(TbItemParam record);
 
     int updateByPrimaryKey(TbItemParam record);
-    int batchDeleteItemParamByPrimaryKeys(Long[] ids);
+    int batchDeleteItemParamByPrimaryKeys(@Param("ids") Long[] ids);
 }

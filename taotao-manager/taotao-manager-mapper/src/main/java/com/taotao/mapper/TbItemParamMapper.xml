@@ -250,10 +250,10 @@
   </update>
   <delete id="batchDeleteItemParamByPrimaryKeys">
     <if test="ids != null and ids.length > 0">
-      DELETE tb_item_param
+      DELETE FROM tb_item_param
       WHERE tb_item_param.id IN
       <foreach collection="ids" open="(" close=")" separator="," item="id">
-        #{id}
+        #{id, jdbcType=BIGINT}
       </foreach>
     </if>
   </delete>

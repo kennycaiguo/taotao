@@ -36,6 +36,7 @@ public class ItemParamController {
 	}
 
 	@RequestMapping(method = RequestMethod.POST, value = "/item/param/delete")
+	@ResponseBody
 	public CommonResult itemParamDelete(String ids){
 		return itemParamService.deleteItemParam(ids);
 	}
